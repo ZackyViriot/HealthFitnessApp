@@ -12,7 +12,7 @@ const HomeScreen = () => {
   
   return (
     <View className='flex-1 justify-center items-center'>
-      <Text > This will be the home page where you will either login or sign up have to figure out how to store that info</Text>
+      <Text > This will be the home passge where you will either login or sign up have to figure out how to store that info</Text>
       <Button
         title="Go To SignUpPage"
         onPress={() => navigation.navigate('SignUpPage')} // Corrected route name
