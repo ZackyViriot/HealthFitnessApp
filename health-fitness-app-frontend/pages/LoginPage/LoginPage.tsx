@@ -47,6 +47,9 @@ const LoginPage = () => {
             >
                 <Text className="text-white text-center text-lg">Login</Text>
             </TouchableOpacity>
+            <TouchableOpacity>
+                <Text className="text-blue-500 text-center text-lg">Dont have an account sign up here</Text>
+            </TouchableOpacity>
         </View>
     )
 
