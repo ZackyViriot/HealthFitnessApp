@@ -22,6 +22,7 @@ const HomeScreen: React.FC = () => {
 
   //going to need a state for the user infromation 
   const [user,setUser] = useState<User | null>(null);
+  //need to make a state for if there is a token or not if there isnt a token we will display the login page 
 
   
 
@@ -40,12 +41,16 @@ const HomeScreen: React.FC = () => {
         const decoded: any = jwtDecode(token);
         //get the user id 
         const userId = decoded.id;
+        console.log(userId)
 
-        const res = await axios.get(`http://localhost:3000/users/${userId}`,{
+
+        const res = await axios.get(`http://localhost:3000/user/${userId}`,{
           headers:{
             Authorization: `Bearer ${token}`
           }
         })
+
+        setUser(res.data);
       }catch(error){
         console.error('Failed to fetch user information:',error)
       }
@@ -58,7 +63,8 @@ const HomeScreen: React.FC = () => {
   
   return (
     <View className='flex-1 justify-center items-center'>
-      <Text > This will be the home passge where you will either login or sign up have to figure out how to store that info</Text>
+      <Text>{user?.email}</Text>
+      <Text className='font-bold text-2xl'>{user?.username}</Text>
       <Button
         title="Go To SignUpPage"
         onPress={() => navigation.navigate('SignUpPage')} // Corrected route name
