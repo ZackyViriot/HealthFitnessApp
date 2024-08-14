@@ -3,4 +3,5 @@ export type RootStackParamList = {
     Calendar: undefined;
     SignUpPage:undefined;
     LoginPage:undefined;
+    GoalsPage:undefined
   };

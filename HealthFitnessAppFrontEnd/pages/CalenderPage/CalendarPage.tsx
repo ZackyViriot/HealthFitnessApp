@@ -1,11 +1,12 @@
 import React from "react";
 import {View,Text,Button} from 'react-native';
+import CalendarComponent from "./CalenderComponent";
 
 
 const CalendarPage = () => {
     return(
         <View>
-            <Text className="bg-blue-600">Calender Page</Text>
+            <CalendarComponent/>
         </View>
     )
 }

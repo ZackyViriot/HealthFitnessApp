@@ -6,6 +6,7 @@ import CalendarPage from './pages/CalenderPage/CalendarPage';
 // import { RootStackParamList } from './types';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import AddGoalsPage from './pages/AddGoalsPage/AddGoalsPage';
 import './global.css'
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="Calendar" component={CalendarPage} />
         <Stack.Screen name="SignUpPage" component={SignUpPage}/>
         <Stack.Screen name="LoginPage" component={LoginPage}/>
+        <Stack.Screen name = 'GoalsPage' component = {AddGoalsPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
