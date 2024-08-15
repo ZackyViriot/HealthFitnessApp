@@ -8,6 +8,7 @@ import SignUpPage from './pages/SignUpPage/SignUpPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import AddGoalsPage from './pages/AddGoalsPage/AddGoalsPage';
 import './global.css'
+import GoalsDashboard from './pages/GoalsDashboard/GoalsDashboard';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="SignUpPage" component={SignUpPage}/>
         <Stack.Screen name="LoginPage" component={LoginPage}/>
         <Stack.Screen name = 'GoalsPage' component = {AddGoalsPage}/>
+        <Stack.Screen name = 'GoalsDashboard' component = {GoalsDashboard}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
