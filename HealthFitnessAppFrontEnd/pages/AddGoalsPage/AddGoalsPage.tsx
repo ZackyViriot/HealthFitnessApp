@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, TextInput, TouchableOpacity, Animated } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../types';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from 'jwt-decode';
 
 const AddGoalsPage = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -19,6 +21,31 @@ const AddGoalsPage = () => {
     });
     const [isPickerVisible, setIsPickerVisible] = useState(false);
     const [pickerHeight] = useState(new Animated.Value(0)); // Animated value to control the height of the picker
+    const [userId,setUserId] = useState("");
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try{
+                const token = await  AsyncStorage.getItem('userToken');
+                if(!token) {
+                    throw new Error('No token found')
+                }
+                const decoded: any = jwtDecode(token);
+                const userId = decoded.id;
+                setUserId(userId);
+
+                const res = await axios.get(`http://localhost:3000/user/${userId}`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  });
+
+            }catch (error) {
+                console.error('Failed to fetch user information:', error);
+            }
+        }
+        fetchUserInfo();
+    },[])
 
     const validateForm = () => {
         let valid = true;
@@ -45,9 +72,13 @@ const AddGoalsPage = () => {
         if (!validateForm()) {
             return;
         }
+        const data = {
+            ...formData,
+            userId
+        }
 
         try {
-            const res = await axios.post('http://localhost:3000/goals/create', formData, {
+            const res = await axios.post('http://localhost:3000/goals/create', data, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
