@@ -71,11 +71,11 @@ const HomeScreen: React.FC = () => {
       <Text className="font-bold text-2xl">{user?.username}</Text>
       <Button
         title="Go To SignUpPage"
-        onPress={() => navigation.navigate('SignUpPage')}
+        onPress={() => navigation.navigate('GoalsPage')}
       />
       <Button
         title = "Go to Goals Page"
-        onPress={() => navigation.navigate('GoalsPage')}
+        onPress={() => navigation.navigate('GoalsDashboard')}
       />
     </View>
   );
