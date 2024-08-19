@@ -16,7 +16,7 @@ interface Goal {
 
 const GoalsDashboardPage: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [goals, setGoals] = useState<Goal[]>([]); 
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,12 +41,16 @@ const GoalsDashboardPage: React.FC = () => {
       } catch (error) {
         console.error('Failed to fetch goals:', error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     fetchUserInfo();
   }, []);
+
+  const handleDeleteGoal = (goalId: string) => {
+    setGoals((prevGoals) => prevGoals.filter((goal) => goal._id !== goalId));
+  };
 
   if (loading) {
     return (
@@ -60,7 +64,7 @@ const GoalsDashboardPage: React.FC = () => {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       {goals.length > 0 ? (
         goals.map((goal) => (
-          <GoalsDashboardCard key={goal._id} goal={goal} />
+          <GoalsDashboardCard key={goal._id} goal={goal} onDeleteGoal={handleDeleteGoal} />
         ))
       ) : (
         <View className='flex-1 justify-center items-center'>

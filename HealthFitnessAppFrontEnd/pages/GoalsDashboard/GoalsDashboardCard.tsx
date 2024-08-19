@@ -1,44 +1,55 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../types';
 
 interface Goal {
-    _id: string;
-    goalTitle: string;
-    description: string;
-    time: string;
+  _id: string;
+  goalTitle: string;
+  description: string;
+  time: string;
 }
 
 interface GoalCardForGoalDashboard {
-    goal: Goal;
+  goal: Goal;
+  onDeleteGoal: (goalId: string) => void;
 }
 
+const GoalsDashboardCard: React.FC<GoalCardForGoalDashboard> = ({ goal, onDeleteGoal }) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-const GoalsDashboardCard: React.FC<GoalCardForGoalDashboard> = ({ goal }) => {
-    const [goalToDelete,setGoalToDelete] = useState<string |null>(null);
-
-    const handleDelete = () => {
-        
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:3000/goals/${goal._id}`);
+      if (res.status === 200) {
+        onDeleteGoal(goal._id); // Remove goal from the list
+      } else {
+        throw new Error('Error in deleting goal');
+      }
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-
-    return (
-        <View className="bg-white rounded-2xl m-5 p-4 shadow-lg">
-            <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-xl font-bold text-gray-900">{goal.goalTitle}</Text>
-                <TouchableOpacity className="p-2 bg-red-100 rounded-full">
-                    <Ionicons name="trash-outline" onPress={handleDelete} size={20} color="red" />
-                </TouchableOpacity>
-            </View>
-            <Text className="text-gray-700 mb-3">{goal.description}</Text>
-            <View className="flex-row justify-between items-center">
-                <Text className="text-sm text-gray-500">{goal.time} Days</Text>
-                <TouchableOpacity className="p-2 bg-blue-100 rounded-full">
-                    <Ionicons name="pencil-outline" size={20} color="blue" />
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+  return (
+    <View className="bg-white rounded-2xl m-5 p-4 shadow-lg">
+      <View className="flex-row justify-between items-center mb-2">
+        <Text className="text-xl font-bold text-gray-900">{goal.goalTitle}</Text>
+        <TouchableOpacity className="p-2 bg-red-100 rounded-full" onPress={handleDelete}>
+          <Ionicons name="trash-outline" size={20} color="red" />
+        </TouchableOpacity>
+      </View>
+      <Text className="text-gray-700 mb-3">{goal.description}</Text>
+      <View className="flex-row justify-between items-center">
+        <Text className="text-sm text-gray-500">{goal.time} Days</Text>
+        <TouchableOpacity className="p-2 bg-blue-100 rounded-full">
+          <Ionicons name="pencil-outline" size={20} color="blue" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 };
 
 export default GoalsDashboardCard;
