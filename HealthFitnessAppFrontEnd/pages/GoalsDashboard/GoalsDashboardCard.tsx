@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -20,17 +20,34 @@ interface GoalCardForGoalDashboard {
 const GoalsDashboardCard: React.FC<GoalCardForGoalDashboard> = ({ goal, onDeleteGoal }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const handleDelete = async () => {
-    try {
-      const res = await axios.delete(`http://localhost:3000/goals/${goal._id}`);
-      if (res.status === 200) {
-        onDeleteGoal(goal._id); // Remove goal from the list
-      } else {
-        throw new Error('Error in deleting goal');
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleDelete = () => {
+    Alert.alert(
+      'Confirm Deletion',
+      'Are you sure you want to delete this goal?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: async () => {
+            try {
+              const res = await axios.delete(`http://localhost:3000/goals/${goal._id}`);
+              if (res.status === 200) {
+                onDeleteGoal(goal._id); // Remove goal from the list
+              } else {
+                throw new Error('Error in deleting goal');
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
