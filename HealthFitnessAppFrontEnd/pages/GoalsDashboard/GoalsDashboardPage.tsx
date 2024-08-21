@@ -46,7 +46,7 @@ const GoalsDashboardPage: React.FC = () => {
     };
 
     fetchUserInfo();
-  }, []);
+  }, [navigation]);
 
   const handleDeleteGoal = (goalId: string) => {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal._id !== goalId));
@@ -61,24 +61,34 @@ const GoalsDashboardPage: React.FC = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      {goals.length > 0 ? (
-        goals.map((goal) => (
-          <GoalsDashboardCard key={goal._id} goal={goal} onDeleteGoal={handleDeleteGoal} />
-        ))
-      ) : (
-        <View className='flex-1 justify-center items-center'>
-          <Text className='text-center font-bold text-lg text-gray-700 mb-4'>
-            No goals found
-          </Text>
-          <TouchableOpacity 
-            onPress={() => navigation.navigate('GoalsPage')}
-            className='bg-black p-3  rounded-lg '>
-            <Text className='text-white text-lg'>Add Goals</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </ScrollView>
+    <View className="flex-1 justify-between">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {goals.length > 0 ? (
+          goals.map((goal) => (
+            <GoalsDashboardCard key={goal._id} goal={goal} onDeleteGoal={handleDeleteGoal} />
+          ))
+        ) : (
+          <View className='flex-1 justify-center items-center'>
+            <Text className='text-center font-bold text-lg text-gray-700 mb-4'>
+              No goals found
+            </Text>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('GoalsPage')}
+              className='bg-black p-4  rounded-lg w-11/12 mx-auto'>
+              <Text className='text-white text-lg text-center'>Add Goals</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ScrollView>
+
+      <View className="p-4 justify-center items-center">
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('GoalsPage')}
+          className='bg-black p-4 rounded-lg w-1/2 '>
+          <Text className='text-white text-lg rounded-xl text-center'>Add Goals</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 

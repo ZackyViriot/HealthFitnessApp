@@ -86,7 +86,7 @@ const AddGoalsPage = () => {
             const token = res.data.token;
 
             if (token) {
-                navigation.navigate('GoalsDashboard');
+                navigation.navigate('Home');
             }
         } catch (error) {
             console.error(error);
