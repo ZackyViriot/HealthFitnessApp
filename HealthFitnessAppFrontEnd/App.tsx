@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import AddGoalsPage from './pages/AddGoalsPage/AddGoalsPage';
 import './global.css'
 import GoalsDashboardPage from './pages/GoalsDashboard/GoalsDashboardPage';
+import EventsForCalendarForm from './pages/CalenderPage/EventsForCalendar/EventsForCalendarForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="LoginPage" component={LoginPage}/>
         <Stack.Screen name = 'GoalsPage' component = {AddGoalsPage}/>
         <Stack.Screen name = 'GoalsDashboard' component = {GoalsDashboardPage}/>
+        <Stack.Screen name = 'EventsForCalendarForm' component = {EventsForCalendarForm}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
