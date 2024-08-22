@@ -77,6 +77,10 @@ const HomeScreen: React.FC = () => {
         title = "Go to Goals Page"
         onPress={() => navigation.navigate('GoalsDashboard')}
       />
+      <Button 
+        title = 'Go to Calender Page'
+        onPress = {() => navigation.navigate("Calendar")}
+      />
     </View>
   );
 };

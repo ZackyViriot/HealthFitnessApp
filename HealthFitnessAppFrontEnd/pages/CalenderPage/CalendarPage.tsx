@@ -1,14 +1,16 @@
-import React from "react";
-import {View,Text,Button} from 'react-native';
-import CalendarComponent from "./CalenderComponent";
-
+import React,{useState} from "react";
+import { SafeAreaView, View } from 'react-native';
+import { Calendar,Agenda } from 'react-native-calendars';
 
 const CalendarPage = () => {
-    return(
-        <View>
-            <CalendarComponent/>
-        </View>
-    )
+    //state for selected day 
+    const [selected,setSelected] = useState('')
+
+    return (
+        <SafeAreaView className="flex-1">
+            <Agenda/>
+        </SafeAreaView>
+    );
 }
 
 export default CalendarPage;
