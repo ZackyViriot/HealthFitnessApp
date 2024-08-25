@@ -4,29 +4,47 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../types';
 import { DatePicker } from '../../../components/nativewindui/DatePicker';
 import { Picker } from '@react-native-picker/picker';
-
-
-
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from 'jwt-decode';
 
 const EventsForCalendarForm = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-    const [date, setDate] = React.useState(new Date());
-
-
+    const [date, setDate] = useState(new Date());
     const [formData, setFormData] = useState({
-        event: "",
+        eventTitle: "",
         importance: "",
     });
     const [errors, setErrors] = useState({
-        event: "",
+        eventTitle: "",
         importance: "",
     });
-
     const [isPickerVisible, setIsPickerVisible] = useState(false);
     const [pickerHeight] = useState(new Animated.Value(0));
     const [userId, setUserId] = useState("");
 
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const token = await AsyncStorage.getItem("userToken");
+                if (!token) {
+                    throw new Error("No token found");
+                }
+                const decoded: any = jwtDecode(token);
+                const userId = decoded.id;
+                setUserId(userId);
+
+                const res = await axios.get(`http://localhost:3000/user/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                console.error("Failed to fetch user information", error);
+            }
+        }
+        fetchUserInfo();
+    }, []);
 
     const openPicker = () => {
         setIsPickerVisible(true);
@@ -45,10 +63,48 @@ const EventsForCalendarForm = () => {
         }).start(() => setIsPickerVisible(false));
     };
 
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = { eventTitle: "", importance: "" };
+
+        if (!formData.eventTitle.trim()) {
+            newErrors.eventTitle = "Event name is required";
+            valid = false;
+        }
+
+        if (!formData.importance) {
+            newErrors.importance = "Importance level is required";
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
 
     const handleAddEvent = async () => {
+        if(!validateForm()){
+            return;
+        }
+        const data = {
+            ...formData,
+            date,
+            userId
+        }
 
-    }
+        try {
+            const res = await axios.post('http://localhost:3000/events/create',data,{
+                headers: {
+                    'Content-Type' : "application/json"
+                }
+            });
+            const token = res.data.token;
+            if(token){
+                navigation.navigate('Calendar')
+            }
+        }catch(error){
+            console.error(error);
+        }
+    };
 
     return (
         <View className='flex-1 p-6 bg-gray-100 justify-center'>
@@ -56,13 +112,13 @@ const EventsForCalendarForm = () => {
             <View className='mb-4'>
                 <Text className='text-lg mb-2'>Event</Text>
                 <TextInput
-                    className={`bg-white p-4 rounded-lg shadow-sm ${errors.event ? 'border-red-500 border-2' : ''}`}
+                    className={`bg-white p-4 rounded-lg shadow-sm ${errors.eventTitle ? 'border-red-500 border-2' : ''}`}
                     placeholder='Event'
-                    value={formData.event}
-                    onChangeText={(value) => setFormData({ ...formData, event: value })}
+                    value={formData.eventTitle}
+                    onChangeText={(value) => setFormData({ ...formData, eventTitle: value })}
                     keyboardType='default'
                 />
-                {errors.event ? <Text className='text-red-500'>{errors.event}</Text> : null}
+                {errors.eventTitle ? <Text className='text-red-500'>{errors.eventTitle}</Text> : null}
             </View>
             <View className='mb-4 items-center rounded-lg'>
                 <Text className='text-lg mb-2'>Select importance of Event</Text>
@@ -94,7 +150,6 @@ const EventsForCalendarForm = () => {
                 <Text className='text-white text-center text-lg'>Add Event</Text>
             </TouchableOpacity>
 
-            {/* Animated View for Picker */}
             {isPickerVisible && (
                 <Animated.View style={{ height: pickerHeight, overflow: 'hidden', backgroundColor: 'white', borderRadius: 10, marginTop: 20 }}>
                     <Picker
@@ -110,17 +165,11 @@ const EventsForCalendarForm = () => {
                         <Picker.Item label='3 Medium' value='3' />
                         <Picker.Item label='4' value='4' />
                         <Picker.Item label='5 High' value='5' />
-                     
                     </Picker>
                 </Animated.View>
             )}
         </View>
-
-
-
-
     )
 }
-
 
 export default EventsForCalendarForm;

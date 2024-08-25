@@ -63,7 +63,6 @@ const GoalsDashboardCard: React.FC<GoalCardForGoalDashboard> = ({ goal, onDelete
       <Text className="text-gray-700 mb-3">{goal.description}</Text>
       <View className="flex-row justify-between items-center">
         <Text className="text-sm text-gray-500">{goal.time} Days</Text>
-       
       </View>
     </View>
   );
