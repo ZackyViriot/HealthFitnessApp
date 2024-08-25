@@ -6,5 +6,6 @@ export type RootStackParamList = {
     GoalsPage:undefined;
     GoalsDashboard:undefined;
     EventsForCalendarForm:undefined;
+    CalendarPage:undefined;
 
   };
