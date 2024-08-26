@@ -50,7 +50,9 @@ const CalendarPage = () => {
 
     return (
         <SafeAreaView className="flex-1">
-            <Agenda/>
+            {/* <Agenda
+                items={events}
+            /> */}
         </SafeAreaView>
     );
 }
